@@ -103,3 +103,63 @@ st.caption("앞으로 더 다양한 시간 중심의 박스오피스 그래프�
 
 # 예시 자리 플레이스홀더
 st.info("💡 **이 그래프로 알 수 있는 것:** (새로운 그래프 추가 후 알 수 있는 인사이트가 표시될 공간입니다.)")
+)
+fig1.update_layout(
+    xaxis_title="날짜",
+    yaxis_title="일일 관객 수",
+    hovermode="x unified"
+)
+
+st.plotly_chart(fig1, use_container_width=True)
+
+st.info(f"💡 **이 그래프로 알 수 있는 것:** '{selected_movie}'의 흥행 전개 양상(개봉 초기 화제성, 주말 폭증 패턴, 흥행 유지 기간 및 꺾임 시점)을 직관적으로 파악할 수 있습니다.")
+
+st.divider()
+
+# ---------------------------------------------------------
+# 구역 2: 기간 내 관객수 상위 Top 5 영화의 일관객 추이 비교
+# ---------------------------------------------------------
+st.header("2. 관객 수 Top 5 영화의 일관객 비교")
+st.write("해당 기간 동안 일관객 합계가 가장 큰 상위 5편 영화의 날짜별 관객 수 추이를 한눈에 비교합니다.")
+
+# 1년 간 일관객 합계 상위 5개 영화 도출
+top5_movies = df.groupby('영화명')['일관객'].sum().nlargest(5).index.tolist()
+
+# Top 5 영화 데이터 필터링
+top5_df = df[df['영화명'].isin(top5_movies)].sort_values(['날짜', '영화명'])
+
+# Plotly 다중 선 그래프 생성
+fig2 = px.line(
+    top5_df,
+    x='날짜',
+    y='일관객',
+    color='영화명',
+    title="기간 내 일관객 합계 Top 5 영화의 날짜별 관객 수 변화 비교",
+    labels={'날짜': '날짜', '일관객': '일일 관객 수 (명)', '영화명': '영화 제목'},
+    markers=False
+)
+
+fig2.update_traces(
+    hovertemplate="<b>영화:</b> %{fullData.name}<br><b>날짜:</b> %{x|%Y-%m-%d}<br><b>일관객:</b> %{y:,.0f}명<extra></extra>"
+)
+
+fig2.update_layout(
+    xaxis_title="날짜",
+    yaxis_title="일일 관객 수",
+    hovermode="x unified",
+    legend_title_text="영화 (클릭하여 켜기/끄기)"
+)
+
+st.plotly_chart(fig2, use_container_width=True)
+
+st.info("💡 **이 그래프로 알 수 있는 것:** 최고 흥행작 top 5 간의 상영 시기 중첩 여부 및 최고 피크 시 관객 수, 흥행 지속력을 한 번에 비교할 수 있습니다.")
+
+st.divider()
+
+# ---------------------------------------------------------
+# 구역 3: 추후 그래프 추가용 영역 (확장 구역)
+# ---------------------------------------------------------
+st.header("3. [추가 예정] 시간 관련 분석 구역")
+st.write("앞으로 추가될 시계열/시간 관련 다양한 그래프가 들어갈 공간입니다.")
+
+st.info("💡 **이 그래프로 알 수 있는 것:** (그래프 추가 후 알 수 있는 문구가 들어갈 자리입니다.)")
