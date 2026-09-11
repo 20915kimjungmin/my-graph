@@ -316,6 +316,50 @@ for idx, row in top3_days.iterrows():
         borderpad=4
     )
 
+# ---------------------------------------------------------
+# 구역 3: 날짜별 Top 10 일관객 총합 영역 그래프 (피크일 표시)
+# ---------------------------------------------------------
+st.header("3. 날짜별 Top 10 영화 총 관객 수 추이")
+st.write("매일 박스오피스 Top 10 영화의 일관객 합계를 영역 그래프로 확인하고, 전체 극장가 관객 수가 가장 많았던 상위 3일을 확인합니다.")
+
+daily_total_df = df.groupby('날짜')['일관객'].sum().reset_index().sort_values('날짜')
+top3_days = daily_total_df.nlargest(3, '일관객')
+
+fig3 = px.area(
+    daily_total_df,
+    x='날짜',
+    y='일관객',
+    title="일별 박스오피스 Top 10 일관객 총합 변화",
+    labels={'날짜': '날짜', '일관객': 'Top 10 관객 수 합계 (명)'}
+)
+
+fig3.update_traces(
+    hovertemplate="<b>날짜:</b> %{x|%Y-%m-%d}<br><b>Top 10 관객 수 총합:</b> %{y:,.0f}명<extra></extra>",
+    line_color="#2E86C1",
+    fillcolor="rgba(46, 134, 193, 0.3)"
+)
+
+for idx, row in top3_days.iterrows():
+    date_str = row['날짜'].strftime('%Y-%m-%d')
+    audience = row['일관객']
+    
+    fig3.add_annotation(
+        x=row['날짜'],
+        y=audience,
+        text=f"<b>Top {top3_days.index.get_loc(idx)+1}: {date_str}</b><br>({audience:,.0f}명)",
+        showarrow=True,
+        arrowhead=2,
+        arrowsize=1,
+        arrowwidth=2,
+        arrowcolor="#E74C3C",
+        ax=0,
+        ay=-40,
+        bgcolor="#FADBD8",
+        bordercolor="#E74C3C",
+        borderwidth=1,
+        borderpad=4
+    )
+
 fig3.update_layout(
     xaxis_title="날짜",
     yaxis_title="Top 10 총 관객 수",
@@ -325,13 +369,3 @@ fig3.update_layout(
 st.plotly_chart(fig3, use_container_width=True)
 
 st.info("💡 **이 그래프로 알 수 있는 것:** 전체 영화 시장의 연중 성수기와 비수기 흐름을 파악하고, 극장가 전체 관객 동원력이 최고조에 달했던 대표적인 3일을 확인할 수 있습니다.")
-
-st.divider()
-
-# ---------------------------------------------------------
-# 구역 4: 추후 그래프 추가용 영역 (확장 구역)
-# ---------------------------------------------------------
-st.header("4. [추가 예정] 시간 관련 분석 구역")
-st.write("앞으로 추가될 시계열/시간 관련 다양한 그래프가 들어갈 공간입니다.")
-
-st.info("💡 **이 그래프로 알 수 있는 것:** (그래프 추가 후 알 수 있는 문구가 들어갈 자리입니다.)")
