@@ -52,3 +52,12 @@ fig3.add_scatter(x=peak3["날짜"], y=peak3["일관객"], mode="markers+text",
                  marker=dict(size=10, color="crimson"), name="가장 붐빈 3일")
 st.plotly_chart(fig3, width="stretch")
 st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
+# ── 그래프 4. 기간 전체 관객 TOP 10 ─────────────────────────
+st.header("4. 이 기간 관객이 가장 많았던 열 편")
+total = (df.groupby("영화명", as_index=False)
+           .agg(관객합계=("일관객", "sum"), 등장일수=("날짜", "count"))
+           .nlargest(10, "관객합계"))
+fig4 = px.bar(total.sort_values("관객합계"), x="관객합계", y="영화명",
+              orientation="h", hover_data=["등장일수"])
+st.plotly_chart(fig4, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
