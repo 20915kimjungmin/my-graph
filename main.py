@@ -35,13 +35,14 @@ st.plotly_chart(fig, width="stretch")
 st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
 
 # ── 앞으로 그래프 2, 3, 4, 5가 이 아래에 추가됩니다 ──────────
+
 # ── 그래프 2. 흥행 대작들의 곡선 겹쳐 보기 ────────────────────
 st.header("2. 흥행 대작 다섯 편의 곡선")
 top5 = df.groupby("영화명")["일관객"].sum().nlargest(5).index
 five = df[df["영화명"].isin(top5)].sort_values("날짜")
 fig2 = px.line(five, x="날짜", y="일관객", color="영화명", markers=True)
 st.plotly_chart(fig2, width="stretch")
-st.caption("이 그래프로 알 수 있는 것: ( 다섯 곡선이 한 화면에 오르는데, 10위권에 처음 든 날이 서로 달라 출발점이 어긋납니다)")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
 
 # ── 그래프 3. 극장가 전체의 흐름과 봉우리 ─────────────────────
 st.header("3. 날짜별 10위권 관객 합계")
@@ -52,7 +53,7 @@ fig3.add_scatter(x=peak3["날짜"], y=peak3["일관객"], mode="markers+text",
                  text=peak3["날짜"].dt.strftime("%Y-%m-%d"), textposition="top center",
                  marker=dict(size=10, color="crimson"), name="가장 붐빈 3일")
 st.plotly_chart(fig3, width="stretch")
-st.caption("이 그래프로 알 수 있는 것: (그래프 위에 찍힌 3일이 오늘의 발견입니다. 아래 4절에서 함께 확인합니다.)")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
 
 # ── 그래프 4. 기간 전체 관객 TOP 10 ─────────────────────────
 st.header("4. 이 기간 관객이 가장 많았던 열 편")
@@ -62,5 +63,4 @@ total = (df.groupby("영화명", as_index=False)
 fig4 = px.bar(total.sort_values("관객합계"), x="관객합계", y="영화명",
               orientation="h", hover_data=["등장일수"])
 st.plotly_chart(fig4, width="stretch")
-st.caption("이 그래프로 알 수 있는 것: (무엇으로 정렬하느냐에 따라 순위가 달라집니다.)")
-
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
